@@ -1,4 +1,3 @@
-// src/services/authService.ts
 import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
@@ -25,38 +24,33 @@ class AuthService {
   private userKey = 'auth_user';
   private listeners: Set<() => void> = new Set();
 
-async login(username: string, password: string): Promise<LoginResponse> {
-  try {
-    const response = await axios.post(`${API_BASE_URL}/auth/login`, {
-      username,
-      password
-    });
-    
-    const { token, user } = response.data;
-    
-    // Asegúrate de que estas líneas se ejecuten:
-    this.setToken(token);
-    this.setUser(user);
-    this.setAuthHeader(token); // ← Esta es la más importante
-    
-    return response.data;
-  } catch (error: any) {
-    throw new Error(error.response?.data?.error || 'Error al iniciar sesión');
+  async login(username: string, password: string): Promise<LoginResponse> {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/auth/login`, { 
+        username, 
+        password 
+      });
+
+      const { token, user } = response.data;
+
+      this.setToken(token);
+      this.setUser(user);
+      this.notifyListeners();
+
+      return response.data;
+    } catch (error: any) {
+      throw new Error(error.response?.data?.error || 'Error al iniciar sesión');
+    }
   }
-}
 
   logout(): void {
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem(this.userKey);
-    this.removeAuthHeader();
-    
-    // Notificar a todos los listeners
     this.notifyListeners();
   }
 
   isAuthenticated(): boolean {
-    const token = this.getToken();
-    return !!token;
+    return !!this.getToken();
   }
 
   getToken(): string | null {
@@ -69,18 +63,15 @@ async login(username: string, password: string): Promise<LoginResponse> {
   }
 
   isAdmin(): boolean {
-    const user = this.getUser();
-    return user?.rol === 'admin';
+    return this.getUser()?.rol === 'admin';
   }
 
   isRecepcion(): boolean {
-    const user = this.getUser();
-    return user?.rol === 'recepcion';
+    return this.getUser()?.rol === 'recepcion';
   }
 
   isSeguridad(): boolean {
-    const user = this.getUser();
-    return user?.rol === 'seguridad';
+    return this.getUser()?.rol === 'seguridad';
   }
 
   async verifyToken(): Promise<boolean> {
@@ -91,7 +82,7 @@ async login(username: string, password: string): Promise<LoginResponse> {
       await axios.get(`${API_BASE_URL}/auth/verify`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      
+
       return true;
     } catch (error) {
       this.logout();
@@ -99,7 +90,6 @@ async login(username: string, password: string): Promise<LoginResponse> {
     }
   }
 
-  // Sistema de listeners para reactividad
   onAuthChange(callback: () => void): void {
     this.listeners.add(callback);
   }
@@ -120,19 +110,8 @@ async login(username: string, password: string): Promise<LoginResponse> {
     localStorage.setItem(this.userKey, JSON.stringify(user));
   }
 
-  private setAuthHeader(token: string): void {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-  }
-
-  private removeAuthHeader(): void {
-    delete axios.defaults.headers.common['Authorization'];
-  }
-
   init(): void {
-    const token = this.getToken();
-    if (token) {
-      this.setAuthHeader(token);
-    }
+    // Método para inicialización si es necesario
   }
 }
 
