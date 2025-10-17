@@ -116,94 +116,47 @@
                   >
                     Área de visita
                   </label>
-                  <select
-                    id="area_visita"
-                    v-model="visitData.area_visita"
-                    class="input-field w-full text-base sm:text-sm"
-                    required
-                  >
-                    <option value="">Seleccione un área</option>
-                    <option value="Direccion Regional">
-                      Dirección Regional
-                    </option>
-                    <option value="Oficina Asesoria Juridica">
-                      Oficina de Asesoría Jurídica
-                    </option>
-                    <option
-                      value="Oficina Planeamiento Presupuesto Modernizacion"
-                    >
-                      Oficina de Planeamiento, Presupuesto y Modernización
-                    </option>
-                    <option value="Oficina Administracion">
-                      Oficina de Administración
-                    </option>
-                    <option value="Unidad Contabilidad">
-                      Unidad de Contabilidad
-                    </option>
-                    <option value="Unidad Talento Humano">
-                      Unidad de Talento Humano
-                    </option>
-                    <option value="Unidad Logistica Servicios Auxiliares">
-                      Unidad de Logística y Servicios Auxiliares
-                    </option>
-                    <option value="Unidad Patrimonio">
-                      Unidad de Patrimonio
-                    </option>
-                    <option value="Direccion Caminos">
-                      Dirección de Caminos
-                    </option>
-                    <option value="Subdireccion Equipo Mecanico">
-                      Subdirección de Equipo Mecánico
-                    </option>
-                    <option value="Direccion Circulacion Vial">
-                      Dirección de Circulación Vial
-                    </option>
-                    <option value="Subdireccion Transporte Vial">
-                      Subdirección de Transporte Vial
-                    </option>
-                    <option value="Subdireccion Licencia Conducir">
-                      Subdirección de Licencia de Conducir
-                    </option>
-                    <option value="Direccion Telecomunicaciones">
-                      Dirección de Telecomunicaciones
-                    </option>
-                    <option value="Oficina Tramite Documentario">
-                      Oficina de Trámite Documentario
-                    </option>
-                    <option value="Unidad Tesoreria">
-                      Unidad de Tesorería
-                    </option>
-                    <option value="Subdireccion Seguridad Vial">
-                      Subdirección de Seguridad Vial
-                    </option>
-                    <option value="Oficina Seguridad Salud Trabajo">
-                      Oficina de Seguridad y Salud en el Trabajo
-                    </option>
-                    <option value="Oficina Archivo Central">
-                      Oficina de Archivo Central
-                    </option>
-                    <option value="Centro Evaluacion">
-                      Centro de Evaluación
-                    </option>
-                    <option value="Unidad Servicio Orientacion Ciudadano">
-                      Unidad Funcional de Servicio de Orientación al Ciudadano
-                    </option>
-                    <option value="Integridad Institucional">
-                      Integridad Institucional
-                    </option>
-                    <option value="Subdireccion Estudios Laboratorio">
-                      Subdirección de Estudios y Laboratorio
-                    </option>
-                    <option value="Subdireccion Infraestructura Vial">
-                      Subdirección de Infraestructura Vial
-                    </option>
-                    <option value="Consejo Seguridad Vial Huanuco">
-                      Consejo Regional de Seguridad Vial Huánuco
-                    </option>
-                    <option value="Informatica">
-                      Informatica
-                    </option>
-                  </select>
+<select
+  id="area_visita"
+  v-model="visitData.area_visita"
+  class="input-field w-full text-base sm:text-sm"
+  required
+>
+  <option value="">Seleccione un área</option>
+  <option value="Direccion Regional">Dirección Regional</option>
+  <option value="Oficina Asesoria Juridica">Asesoría Jurídica</option>
+  <option value="Integridad Institucional">Integridad Institucional</option>
+  <option value="Oficina Planeamiento Presupuesto Modernizacion">
+    Planeamiento y Presupuesto
+  </option>
+  <option value="Oficina Administracion">Administración</option>
+  <option value="Unidad Contabilidad">Contabilidad</option>
+  <option value="Unidad Talento Humano">Talento Humano</option>
+  <option value="Unidad Logistica Servicios Auxiliares">
+    Logística y Servicios
+  </option>
+  <option value="Unidad Patrimonio">Patrimonio</option>
+  <option value="Unidad Tesoreria">Tesoreria</option>
+  <option value="Direccion Caminos">Dirección de Caminos</option>
+  <option value="Subdireccion Equipo Mecanico">Equipo Mecánico</option>
+  <option value="Subdireccion Infraestructura Vial">Infraestructura Vial</option>
+  <option value="Subdireccion Estudios Laboratorio">Estudios y Laboratorio</option>
+  <option value="Direccion Circulacion Vial">Circulación Vial</option>
+  <option value="Subdireccion Transporte Vial">Transporte Vial</option>
+  <option value="Subdireccion Licencia Conducir">Licencia de Conducir</option>
+  <option value="Subdireccion Seguridad Vial">Seguridad Vial</option>
+  <option value="Direccion Telecomunicaciones">Telecomunicaciones</option>
+  <option value="Oficina Tramite Documentario">Trámite Documentario</option>
+  <option value="Oficina Archivo Central">Archivo Central</option>
+  <option value="Oficina Seguridad Salud Trabajo">Seguridad y Salud</option>
+  <option value="Centro Evaluacion">Centro de Evaluación</option>
+  <option value="Unidad Servicio Orientacion Ciudadano">
+    Orientación al Ciudadano
+  </option>
+  <option value="Informatica">Informática</option>
+  <option value="Oficina Residencial Tingo Maria">Tingo María</option>
+  <option value="Consejo Seguridad Vial Huanuco">Consejo Seguridad Vial</option>
+</select>
                 </div>
 
                 <!-- Motivo de visita -->
@@ -280,13 +233,11 @@
           <!-- Mensajes de estado -->
           <div
             v-if="error"
-            class="mt-4 sm:mt-6 p-3 sm:p-4 bg-red-50 border border-red-200 rounded-lg"
+            class="mt-4 sm:mt-6 p-4 bg-red-50 border border-red-200 rounded-lg animate-fade-in"
           >
-            <div class="flex items-start">
-              <i
-                class="fas fa-exclamation-circle text-red-500 mr-3 mt-0.5 flex-shrink-0"
-              ></i>
-              <p class="text-red-700 text-sm sm:text-base break-words">
+            <div class="flex items-center">
+              <i class="fas fa-exclamation-circle text-red-500 text-xl mr-3 flex-shrink-0"></i>
+              <p class="text-red-700 font-medium text-sm sm:text-base break-words">
                 {{ error }}
               </p>
             </div>
@@ -294,13 +245,11 @@
 
           <div
             v-if="successMessage"
-            class="mt-4 sm:mt-6 p-3 sm:p-4 bg-green-50 border border-green-200 rounded-lg"
+            class="mt-4 sm:mt-6 p-4 bg-green-50 border border-green-200 rounded-lg animate-fade-in"
           >
-            <div class="flex items-start">
-              <i
-                class="fas fa-check-circle text-green-500 mr-3 mt-0.5 flex-shrink-0"
-              ></i>
-              <p class="text-green-700 text-sm sm:text-base break-words">
+            <div class="flex items-center">
+              <i class="fas fa-check-circle text-green-500 text-xl mr-3 flex-shrink-0"></i>
+              <p class="text-green-700 font-medium text-sm sm:text-base break-words">
                 {{ successMessage }}
               </p>
             </div>
@@ -426,13 +375,11 @@
           <!-- Mensajes de estado para salida -->
           <div
             v-if="exitError"
-            class="mt-4 sm:mt-6 p-3 sm:p-4 bg-red-50 border border-red-200 rounded-lg"
+            class="mt-4 sm:mt-6 p-4 bg-red-50 border border-red-200 rounded-lg animate-fade-in"
           >
-            <div class="flex items-start">
-              <i
-                class="fas fa-exclamation-circle text-red-500 mr-3 mt-0.5 flex-shrink-0"
-              ></i>
-              <p class="text-red-700 text-sm sm:text-base break-words">
+            <div class="flex items-center">
+              <i class="fas fa-exclamation-circle text-red-500 text-xl mr-3 flex-shrink-0"></i>
+              <p class="text-red-700 font-medium text-sm sm:text-base break-words">
                 {{ exitError }}
               </p>
             </div>
@@ -440,13 +387,11 @@
 
           <div
             v-if="exitSuccessMessage"
-            class="mt-4 sm:mt-6 p-3 sm:p-4 bg-green-50 border border-green-200 rounded-lg"
+            class="mt-4 sm:mt-6 p-4 bg-green-50 border border-green-200 rounded-lg animate-fade-in"
           >
-            <div class="flex items-start">
-              <i
-                class="fas fa-check-circle text-green-500 mr-3 mt-0.5 flex-shrink-0"
-              ></i>
-              <p class="text-green-700 text-sm sm:text-base break-words">
+            <div class="flex items-center">
+              <i class="fas fa-check-circle text-green-500 text-xl mr-3 flex-shrink-0"></i>
+              <p class="text-green-700 font-medium text-sm sm:text-base break-words">
                 {{ exitSuccessMessage }}
               </p>
             </div>
@@ -455,13 +400,11 @@
           <!-- Mensaje cuando no hay visita activa -->
           <div
             v-if="noActiveVisit"
-            class="mt-4 sm:mt-6 p-3 sm:p-4 bg-yellow-50 border border-yellow-200 rounded-lg"
+            class="mt-4 sm:mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg animate-fade-in"
           >
-            <div class="flex items-start">
-              <i
-                class="fas fa-exclamation-triangle text-yellow-500 mr-3 mt-0.5 flex-shrink-0"
-              ></i>
-              <p class="text-yellow-700 text-sm sm:text-base">
+            <div class="flex items-center">
+              <i class="fas fa-exclamation-triangle text-yellow-500 text-xl mr-3 flex-shrink-0"></i>
+              <p class="text-yellow-700 font-medium text-sm sm:text-base">
                 No se encontró una visita activa para este DNI
               </p>
             </div>
@@ -579,26 +522,31 @@ export default defineComponent({
       }
     };
 
-    const handleSubmit = async (): Promise<void> => {
-      if (!personData.value) return;
+const handleSubmit = async (): Promise<void> => {
+  if (!personData.value) return;
 
-      try {
-        const fullVisitData = {
-          dni: dni.value,
-          ...visitData.value,
-        };
-
-        await visitStore.registerEntry(fullVisitData);
-
-        successMessage.value = "✅ Visita registrada exitosamente";
-        error.value = "";
-
-        resetForm();
-      } catch (err: any) {
-        error.value = err.response?.data?.error || "Error al registrar visita";
-        successMessage.value = "";
-      }
+  try {
+    const fullVisitData = {
+      dni: dni.value,
+      ...visitData.value,
     };
+
+    await visitStore.registerEntry(fullVisitData);
+
+    successMessage.value = "✅ Visita registrada exitosamente";
+    error.value = "";
+
+    // Limpiar mensaje Y resetear formulario después de 2 segundos
+    setTimeout(() => {
+      successMessage.value = "";
+      resetForm();  // ← Ahora está DENTRO del setTimeout
+    }, 2000);
+
+  } catch (err: any) {
+    error.value = err.response?.data?.error || "Error al registrar visita";
+    successMessage.value = "";
+  }
+};
 
     const handleExitSubmit = async (): Promise<void> => {
       if (!activeVisitData.value) return;
@@ -720,6 +668,22 @@ export default defineComponent({
 
   .text-xl {
     @apply text-lg;
+  }
+}
+
+/* Animaciones para mensajes */
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 </style>
