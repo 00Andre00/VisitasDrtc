@@ -84,7 +84,7 @@
               </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
-              <tr v-for="visit in visits" :key="visit.id" class="hover:bg-gray-50">
+              <tr v-for="visit in paginatedVisits" :key="visit.id" class="hover:bg-gray-50">
                 <td class="px-6 py-4 whitespace-nowrap">
                   <div class="text-sm font-medium text-gray-900">
                     {{ visit.nombres }} {{ visit.apellido_paterno }} {{ visit.apellido_materno }}
@@ -92,7 +92,7 @@
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-mono">{{ visit.dni }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ visit.area_visita }}</td>
-                <td class="px-6 py-4 text-sm text-gray-900">{{ visit.motivo }}</td>
+                <td class="px-6 py-4 text-sm text-gray-900">{{ visit.motivo || '-' }}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {{ formatDateTime(visit.fecha_entrada) }}
                 </td>
@@ -109,9 +109,63 @@
 
         <!-- Paginación -->
         <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
-          <div class="flex justify-between items-center">
+          <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="text-sm text-gray-700">
-              Mostrando {{ visits.length }} de {{ allVisitsCount }} visitas
+              Mostrando {{ startIndex + 1 }} a {{ endIndex }} de {{ filteredVisitsCount }} visitas
+              <span v-if="filteredVisitsCount !== allVisitsCount" class="text-gray-500">
+                (filtrado de {{ allVisitsCount }} total)
+              </span>
+            </div>
+            
+            <div class="flex items-center gap-2">
+              <!-- Registros por página -->
+              <select 
+                v-model="itemsPerPage" 
+                class="border border-gray-300 rounded px-2 py-1 text-sm"
+                @change="currentPage = 1"
+              >
+                <option :value="10">10</option>
+                <option :value="25">25</option>
+                <option :value="50">50</option>
+                <option :value="100">100</option>
+              </select>
+              
+              <!-- Botones de paginación -->
+              <button
+                @click="currentPage = 1"
+                :disabled="currentPage === 1"
+                class="px-3 py-1 rounded bg-white border border-gray-300 text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+              >
+                Primero
+              </button>
+              
+              <button
+                @click="currentPage--"
+                :disabled="currentPage === 1"
+                class="px-3 py-1 rounded bg-white border border-gray-300 text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+              >
+                Anterior
+              </button>
+              
+              <span class="px-3 py-1 text-sm text-gray-700">
+                Página {{ currentPage }} de {{ totalPages }}
+              </span>
+              
+              <button
+                @click="currentPage++"
+                :disabled="currentPage === totalPages"
+                class="px-3 py-1 rounded bg-white border border-gray-300 text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+              >
+                Siguiente
+              </button>
+              
+              <button
+                @click="currentPage = totalPages"
+                :disabled="currentPage === totalPages"
+                class="px-3 py-1 rounded bg-white border border-gray-300 text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+              >
+                Último
+              </button>
             </div>
           </div>
         </div>
@@ -124,7 +178,7 @@
       </div>
 
       <!-- Empty State -->
-      <div v-if="!loading && visits.length === 0" class="p-8 text-center">
+      <div v-if="!loading && filteredVisitsCount === 0" class="p-8 text-center">
         <i class="fas fa-inbox text-gray-300 text-4xl mb-4"></i>
         <h3 class="text-lg font-medium text-gray-600 mb-2">No hay visitas registradas</h3>
         <p class="text-gray-500">No se encontraron visitas con los filtros aplicados</p>
@@ -134,7 +188,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, onMounted } from 'vue';
+import { defineComponent, ref, computed, onMounted, watch } from 'vue';
 import { useVisitStore } from '@/stores/visitStore';
 import type { Visita } from '@/types';
 
@@ -145,22 +199,21 @@ export default defineComponent({
     const searchDni = ref('');
     const searchName = ref('');
     const dateFilter = ref('month');
-
     const allVisits = ref<Visita[]>([]);
+    const currentPage = ref(1);
+    const itemsPerPage = ref(25);
 
     const loadVisits = async (): Promise<void> => {
       await visitStore.fetchVisitHistory();
       allVisits.value = visitStore.visitHistory;
     };
 
-    const visits = computed(() => {
+    const filteredVisits = computed(() => {
       return allVisits.value.filter(visit => {
-        // Filtro por DNI
         if (searchDni.value && !visit.dni?.includes(searchDni.value)) {
           return false;
         }
 
-        // Filtro por nombre
         if (searchName.value) {
           const searchTerm = searchName.value.toLowerCase();
           const fullName = `${visit.nombres} ${visit.apellido_paterno} ${visit.apellido_materno}`.toLowerCase();
@@ -169,7 +222,6 @@ export default defineComponent({
           }
         }
 
-        // Filtro por fecha
         const visitDate = new Date(visit.fecha_entrada);
         const now = new Date();
         
@@ -190,7 +242,29 @@ export default defineComponent({
       });
     });
 
+    const filteredVisitsCount = computed(() => filteredVisits.value.length);
     const allVisitsCount = computed(() => allVisits.value.length);
+
+    const totalPages = computed(() => {
+      return Math.ceil(filteredVisitsCount.value / itemsPerPage.value) || 1;
+    });
+
+    const startIndex = computed(() => {
+      return (currentPage.value - 1) * itemsPerPage.value;
+    });
+
+    const endIndex = computed(() => {
+      return Math.min(startIndex.value + itemsPerPage.value, filteredVisitsCount.value);
+    });
+
+    const paginatedVisits = computed(() => {
+      return filteredVisits.value.slice(startIndex.value, endIndex.value);
+    });
+
+    // Reset a página 1 cuando cambien los filtros
+    watch([searchDni, searchName, dateFilter], () => {
+      currentPage.value = 1;
+    });
 
     const stats = computed(() => {
       const now = new Date();
@@ -242,18 +316,28 @@ export default defineComponent({
       loadVisits();
     });
 
-    return {
-      visits,
-      allVisitsCount,
-      searchDni,
-      searchName,
-      dateFilter,
-      stats,
-      currentDate,
-      formatDateTime,
-      calculateDuration,
-      loading: computed(() => visitStore.loading)
-    };
+onMounted(() => {
+  loadVisits();
+});
+
+return {
+  paginatedVisits,
+  filteredVisitsCount,
+  allVisitsCount,
+  searchDni,
+  searchName,
+  dateFilter,
+  stats,
+  currentDate,
+  formatDateTime,
+  calculateDuration,
+  loading: computed(() => visitStore.loading),
+  currentPage,
+  itemsPerPage,
+  totalPages,
+  startIndex,
+  endIndex
+};
   }
 });
 </script>
