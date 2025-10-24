@@ -1,5 +1,4 @@
 <template>
-  <PublicLayout>
     <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div class="max-w-md w-full space-y-8">
         <div>
@@ -71,19 +70,16 @@
         </form>
       </div>
     </div>
-  </PublicLayout>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import authService from '@/services/authService';
-import PublicLayout from '@/components/Layout/PublicLayout.vue';
 
 export default defineComponent({
   name: 'LoginView',
   components: {
-    PublicLayout
   },
   setup() {
     const router = useRouter();

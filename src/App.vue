@@ -1,8 +1,13 @@
 <template>
-  <!-- Layout Público (sin sidebar) -->
-  <PublicLayout v-if="$route.meta.public">
+  <!-- Layout Público (sin sidebar) - EXCLUYENDO login -->
+  <PublicLayout v-if="$route.meta.public && $route.name !== 'Login'">
     <router-view />
   </PublicLayout>
+
+  <!-- Login sin layout -->
+  <div v-else-if="$route.name === 'Login'" class="min-h-screen bg-gray-50">
+    <router-view />
+  </div>
 
   <!-- Layout Normal (con sidebar) -->
   <div v-else class="min-h-screen flex flex-col bg-gray-50">
